@@ -6,3 +6,4 @@ DEBUG Processing request
 {"message":"Hello World","level":"INFO"}
 {"error":"Connection timeout","code":500}
 
+
