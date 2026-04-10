@@ -1,0 +1,8 @@
+INFO log for test
+INFO Application started
+ERROR Failed to connect to database
+WARN Deprecated API used
+DEBUG Processing request
+{"message":"Hello World","level":"INFO"}
+{"error":"Connection timeout","code":500}
+
