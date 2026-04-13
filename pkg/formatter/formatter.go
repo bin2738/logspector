@@ -21,13 +21,15 @@ func (f *Formatter) Format(line string) {
 		return
 	}
 
-	// Если включён JSON-режим и строка — JSON, форматируем
-	if f.jsonFlag && IsJSON(line) {
+	// Если включён JSON-режим, пытаемся распарсить строку
+	if f.jsonFlag {
 		var js map[string]interface{}
-		json.Unmarshal([]byte(line), &js)
-		output, _ := json.MarshalIndent(js, "", "  ")
-		fmt.Println(string(output))
-		return
+		if err := json.Unmarshal([]byte(line), &js); err == nil {
+			output, _ := json.MarshalIndent(js, "", "  ")
+			fmt.Println(string(output))
+			return
+		}
+		// Если err != nil, значит это не JSON, идем дальше к обычному цветному выводу
 	}
 
 	// Цветной вывод
@@ -60,9 +62,4 @@ func detectLevel(line string) string {
 	default:
 		return ""
 	}
-}
-
-func IsJSON(s string) bool {
-	var js map[string]interface{}
-	return json.Unmarshal([]byte(s), &js) == nil
 }
