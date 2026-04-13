@@ -103,6 +103,13 @@ cat log.json | ./logspector -json
 ```
 
 ---
+# Сборка для Linux (64-bit)
+GOOS=linux GOARCH=amd64 go build -o logspector-linux ./cmd/logspector
+
+# Сборка для Windows (64-bit)
+GOOS=windows GOARCH=amd64 go build -o logspector.exe ./cmd/logspector
+
+---
 
 ## 📝 Лицензия
 
