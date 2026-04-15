@@ -9,8 +9,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"logspector/pkg/formatter"
-	"logspector/pkg/parser"
+	"github.com/bin2738/logspector/pkg/formatter"
+	"github.com/bin2738/logspector/pkg/parser"
 
 	"github.com/fsnotify/fsnotify"
 )

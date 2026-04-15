@@ -1,4 +1,4 @@
-module logspector
+module github.com/bin2738/logspector
 
 go 1.26.2
 
