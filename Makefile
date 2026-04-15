@@ -6,6 +6,7 @@ LDFLAGS = -ldflags "-X main.Version=$(VERSION)"
 
 .PHONY: all build build-linux build-windows build-macos build-all test cover clean run deps
 
+
 all: test build
 
 build:
