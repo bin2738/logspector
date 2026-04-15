@@ -4,21 +4,46 @@ import (
 	"encoding/json"
 	"fmt"
 	"strings"
+	"sync"
 
 	"github.com/fatih/color"
 )
 
 type Formatter struct {
+	mu       sync.RWMutex
 	jsonFlag bool
+	noColor  bool
 }
 
-func NewFormatter(jsonFlag bool) *Formatter {
-	return &Formatter{jsonFlag: jsonFlag}
+func NewFormatter(jsonFlag, noColor bool) *Formatter {
+	return &Formatter{
+		jsonFlag: jsonFlag,
+		noColor:  noColor,
+	}
 }
 
-func (f *Formatter) Format(line string) {
+func (f *Formatter) Update(jsonFlag, noColor bool) {
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	f.jsonFlag = jsonFlag
+	f.noColor = noColor
+}
+
+func (f *Formatter) Format(line string, prefix string) {
+	f.mu.RLock()
+	defer f.mu.RUnlock()
+
 	if line == "" {
 		return
+	}
+
+	var prefixStr string
+	if prefix != "" {
+		if f.noColor {
+			prefixStr = fmt.Sprintf("[%s] ", prefix)
+		} else {
+			prefixStr = color.New(color.FgCyan).Sprintf("[%s] ", prefix)
+		}
 	}
 
 	// Если включён JSON-режим, пытаемся распарсить строку
@@ -26,26 +51,34 @@ func (f *Formatter) Format(line string) {
 		var js map[string]interface{}
 		if err := json.Unmarshal([]byte(line), &js); err == nil {
 			output, _ := json.MarshalIndent(js, "", "  ")
-			fmt.Println(string(output))
+			fmt.Printf("%s%s\n", prefixStr, string(output))
 			return
 		}
 		// Если err != nil, значит это не JSON, идем дальше к обычному цветному выводу
 	}
 
+	if f.noColor {
+		fmt.Printf("%s%s\n", prefixStr, line)
+		return
+	}
+
 	// Цветной вывод
 	level := detectLevel(line)
+	var coloredLine string
 	switch level {
 	case "ERROR":
-		color.New(color.FgRed).Println(line)
+		coloredLine = color.New(color.FgRed).Sprint(line)
 	case "WARN":
-		color.New(color.FgYellow).Println(line)
+		coloredLine = color.New(color.FgYellow).Sprint(line)
 	case "INFO":
-		color.New(color.FgGreen).Println(line)
+		coloredLine = color.New(color.FgGreen).Sprint(line)
 	case "DEBUG":
-		color.New(color.FgBlue).Println(line)
+		coloredLine = color.New(color.FgBlue).Sprint(line)
 	default:
-		fmt.Println(line)
+		coloredLine = line
 	}
+
+	fmt.Printf("%s%s\n", prefixStr, coloredLine)
 }
 
 func detectLevel(line string) string {

@@ -1,0 +1,19 @@
+# Базовый конфигурационный файл Logspector
+
+# Путь к файлу логов (можно указать несколько через запятую)
+files: "test.log"
+
+# Уровень логирования по умолчанию (ERROR, WARN, INFO, DEBUG)
+# level: "INFO"
+
+# Поиск и исключения (grep / invert match)
+# query: "user_id"
+# invert: "healthcheck"
+
+# Фильтрация по времени
+# since: "1h"
+
+# Принудительный вывод JSON
+json: false
+# Отключить цвета
+no_color: false
