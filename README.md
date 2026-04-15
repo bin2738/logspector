@@ -1,7 +1,7 @@
 # 🔎 Logspector
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/bin2738/logspector)](https://goreportcard.com/report/github.com/bin2738/logspector)
-[![Build Status](https://github.com/bin2738/logspector/actions/workflows/release.yml/badge.svg)](https://github.com/bin2738/logspector/actions)
+[![CI Status](https://github.com/bin2738/logspector/actions/workflows/ci.yml/badge.svg)](https://github.com/bin2738/logspector/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 **Logspector** — это легковесная консольная утилита на Go для удобного просмотра и анализа логов в реальном времени. Она идеально подходит для локальной разработки и отладки, предоставляя мощные возможности фильтрации и подсветки.
