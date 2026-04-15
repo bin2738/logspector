@@ -44,7 +44,7 @@ func TestReader_FileRead(t *testing.T) {
 	color.Output = wPipe
 
 	// 4. Создаем ридер и контекст с отменой
-	r := NewReader(tmpFile.Name())
+	r := NewReader(tmpFile.Name(), "", "", "")
 	ctx, cancel := context.WithCancel(context.Background())
 
 	// Запускаем ReadAndProcess в отдельной горутине, так как внутри он слушает изменения файла (tail -f)

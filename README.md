@@ -1,6 +1,7 @@
 # 🔎 Logspector
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/bin2738/logspector)](https://goreportcard.com/report/github.com/bin2738/logspector)
+[![Build Status](https://github.com/bin2738/logspector/actions/workflows/release.yml/badge.svg)](https://github.com/bin2738/logspector/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 **Logspector** — это легковесная консольная утилита на Go для удобного просмотра и анализа логов в реальном времени. Она идеально подходит для локальной разработки и отладки, предоставляя мощные возможности фильтрации и подсветки.
@@ -11,6 +12,8 @@
 
 Logspector позволяет:
 - **Чтение и отслеживание**: Мониторинг одного или **нескольких файлов** одновременно (в режиме `tail -f`) с умным добавлением префиксов файлов.
+- **Интеграция с Docker**: Чтение логов напрямую из контейнера (`-docker my-container`).
+- **Интеграция с Kubernetes**: Чтение логов напрямую из pod'а (`-kube my-pod`) с поддержкой дополнительных аргументов (`-kube-args "-n my-ns"`).
 - **Продвинутая фильтрация**:
     - По уровню (`ERROR`, `WARN`, `INFO`, `DEBUG`).
     - По тексту с помощью `-q` (как `grep`).
@@ -46,12 +49,16 @@ make build
 
 ---
 
-## 📖 Использование
+## 📖 Примеры использования
 
-### Просмотр логов в реальном времени
+### Базовый просмотр логов
 
 ```bash
-./logspector -f /var/log/myapp.log
+# Просмотр одного файла
+./logspector -f app.log
+
+# Просмотр нескольких файлов одновременно
+./logspector -f app.log,db.log
 ```
 
 ### Фильтрация по уровню
@@ -80,6 +87,7 @@ cat old.log | ./logspector -json
 |----------|------------------------------------------------|
 | `-c`     | Путь к файлу конфигурации (.yaml)              |
 | `-f`     | Путь к файлу с логами (можно указать несколько через запятую) |
+| `-kube`  | Имя Kubernetes pod'а для чтения логов          |
 | `-l`     | Фильтр по уровню лога (`ERROR`, `WARN`, `INFO`, `DEBUG`) |
 | `-q`     | Поиск по подстроке (grep)                      |
 | `-v`     | Исключить строки, содержащие текст (invert match) |

@@ -9,7 +9,7 @@ _logspector_completion() {
     prev="${COMP_WORDS[COMP_CWORD-1]}"
     
     # Все доступные флаги утилиты
-    opts="-c -f -l -json -q -v -no-color -since -until -h"
+    opts="-c -f -docker -kube -kube-args -l -json -q -v -no-color -since -until -h"
 
     # Если предыдущий флаг был -l, предлагаем уровни логов
     if [[ ${prev} == "-l" ]]; then
@@ -20,6 +20,24 @@ _logspector_completion() {
     # Если предыдущий флаг требует путь к файлу (-c или -f), предлагаем файлы из текущей директории
     if [[ ${prev} == "-c" || ${prev} == "-f" ]]; then
         COMPREPLY=( $(compgen -f -- ${cur}) )
+        return 0
+    fi
+
+    # Если предыдущий флаг был -docker, динамически предлагаем запущенные контейнеры!
+    if [[ ${prev} == "-docker" ]]; then
+        COMPREPLY=( $(compgen -W "$(docker ps --format '{{.Names}}' 2>/dev/null)" -- ${cur}) )
+        return 0
+    fi
+
+    # Если предыдущий флаг был -kube, динамически предлагаем имена pod'ов!
+    if [[ ${prev} == "-kube" ]]; then
+        COMPREPLY=( $(compgen -W "$(kubectl get pods -o custom-columns=":metadata.name" --no-headers 2>/dev/null)" -- ${cur}) )
+        return 0
+    fi
+
+    # Если предыдущий флаг был -n (часто используется с -kube-args), предлагаем namespace'ы
+    if [[ ${prev} == "-n" ]]; then
+        COMPREPLY=( $(compgen -W "$(kubectl get namespaces -o custom-columns=":metadata.name" --no-headers 2>/dev/null)" -- ${cur}) )
         return 0
     fi
 
